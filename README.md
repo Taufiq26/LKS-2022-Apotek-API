@@ -1,3 +1,9 @@
+# HOW TO RUN
+1. Jika baru clone project pastikan jalankan command `composer update`
+2. Jalankan project dengan command `php -S 0.0.0.0:8000 -t ./public`
+    - 0.0.0.0:8000 itu agar bisa diakses dengan 2 cara,
+    - `localhost:8000` atau `IP_ADDRESS:8000`
+
 # Lumen PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
@@ -22,4 +28,4 @@ If you discover a security vulnerability within Lumen, please send an e-mail to 
 ## License
 
 The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# LKS-2021-Restaurant-API
+# LKS-2022-Apotek-API

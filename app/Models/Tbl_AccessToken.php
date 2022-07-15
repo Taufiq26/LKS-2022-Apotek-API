@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AccessToken extends Model
+class Tbl_AccessToken extends Model
 {
-    protected $table = 'AccessToken';
+    protected $table = 'Tbl_AccessToken';
     protected $fillable = [
-        'EmployeeId', 'Token'
+        'Id_User', 'Token'
     ];
     public $timestamps = false;
 }

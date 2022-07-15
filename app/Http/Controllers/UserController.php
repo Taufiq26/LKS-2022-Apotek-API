@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\Employee;
-use App\Models\AccessToken;
+use App\Models\Tbl_User;
+use App\Models\Tbl_AccessToken;
+use App\Models\Tbl_LogActivity;
 
-class EmployeeController extends Controller
+class UserController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -46,20 +47,31 @@ class EmployeeController extends Controller
         $username = $req->username;
         $password = $req->password;
 
-        $employee = Employee::where('Email', $username)
+        $user = Tbl_User::where('Username', $username)
                         ->where('Password', md5($password))
                         ->first();
 
-        $token = AccessToken::create([
-                    'EmployeeId' => $employee->Id,
+        $token = Tbl_AccessToken::create([
+                    'Id_User' => $user->Id_User,
                     'Token' => $this->gen_uuid()
                 ]);
 
-        if ($employee && $token)
+        if ($user && $token) {
+            Tbl_LogActivity::create([
+                'waktu' => date("Y-m-d H:i:s"),
+                'aktifitas' => 'Login pada Android',
+                'Id_User' => $user->Id_User
+            ]);
+
             return response()->json([
                 'status' => 'Success',
+                'data' => $user,
                 'access_token' => $token->Token
             ], 200);
+        } else if (!$user)
+            return response()->json([
+                'status' => 'Kombinasi username dan password tidak cocok!'
+            ], 400);
         else
             return response()->json([
                 'status' => 'Fail (missing field / unexpected value)'
@@ -72,12 +84,22 @@ class EmployeeController extends Controller
         $password = $req->password;
 
         try {
-            $employee = Employee::create([
-                            'Email' => $username,
+            $user = Tbl_User::create([
+                            'Tipe_User' => 'Kasir',
+                            'Nama_User' => $req->nama_lengkap,
+                            'Alamat' => $req->alamat,
+                            'Telepon' => $req->telepon,
+                            'Username' => $username,
                             'Password' => md5($password)
                         ]);
 
-            if ($employee)
+            Tbl_LogActivity::create([
+                'waktu' => date("Y-m-d H:i:s"),
+                'aktifitas' => 'Register pada Android',
+                'Id_User' => $user->Id_User
+            ]);
+
+            if ($user)
                 return response()->json([
                     'status' => 'Success'
                 ], 200);

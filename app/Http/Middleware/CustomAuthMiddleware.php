@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-use App\Models\AccessToken;
+use App\Models\Tbl_AccessToken;
 
 class CustomAuthMiddleware
 {
@@ -19,7 +19,7 @@ class CustomAuthMiddleware
     {
         $token = $request->header('Authorization');
 
-        $check_token = AccessToken::where('Token', $token)->first();
+        $check_token = Tbl_AccessToken::where('Token', $token)->first();
 
         if ($token && $check_token)
             return $next($request);
