@@ -32,9 +32,8 @@ $router->group(['middleware' => 'CorsMiddleware'], function($router){
     $router->post('/register', 'UserController@register');
 
     $router->group(['middleware' => 'CustomAuth'], function($router){
-        $router->get('/menu', 'MenuController@getMenu');
-        $router->post('/menu', 'MenuController@storeMenu');
-        $router->put('/menu/{id}', 'MenuController@updateMenu');
-        $router->delete('/menu/{id}', 'MenuController@deleteMenu');
+        $router->get('/obat', 'ObatController@getObat');
+        $router->get('/jenis_obat', 'ObatController@getJenisObat');
+        $router->post('/transaksi', 'TransaksiController@submitTransaksi');
     });
 });
