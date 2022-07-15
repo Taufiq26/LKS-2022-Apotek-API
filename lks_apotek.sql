@@ -5,9 +5,9 @@
 # http://www.sequelpro.com/
 # https://github.com/sequelpro/sequelpro
 #
-# Host: 127.0.0.1 (MySQL 5.5.5-10.1.48-MariaDB-0+deb9u2)
+# Host: 127.0.0.1 (MySQL 5.7.34)
 # Database: lks_apotek
-# Generation Time: 2022-07-15 06:16:06 +0000
+# Generation Time: 2022-07-15 15:39:48 +0000
 # ************************************************************
 
 
@@ -18,6 +18,31 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+# Dump of table Tbl_AccessToken
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `Tbl_AccessToken`;
+
+CREATE TABLE `Tbl_AccessToken` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `Id_User` int(10) unsigned NOT NULL,
+  `Token` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `TokenRelatedToUser` (`Id_User`),
+  CONSTRAINT `TokenRelatedToUser` FOREIGN KEY (`Id_User`) REFERENCES `Tbl_User` (`Id_User`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `Tbl_AccessToken` WRITE;
+/*!40000 ALTER TABLE `Tbl_AccessToken` DISABLE KEYS */;
+
+INSERT INTO `Tbl_AccessToken` (`id`, `Id_User`, `Token`)
+VALUES
+	(1,1,'da90ceb2-4ec0-435c-9054-720a765b4717');
+
+/*!40000 ALTER TABLE `Tbl_AccessToken` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table Tbl_DataResep
@@ -41,6 +66,29 @@ CREATE TABLE `Tbl_DataResep` (
 
 
 
+# Dump of table Tbl_JenisObat
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `Tbl_JenisObat`;
+
+CREATE TABLE `Tbl_JenisObat` (
+  `Id_JenisObat` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `Jenis_Obat` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`Id_JenisObat`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `Tbl_JenisObat` WRITE;
+/*!40000 ALTER TABLE `Tbl_JenisObat` DISABLE KEYS */;
+
+INSERT INTO `Tbl_JenisObat` (`Id_JenisObat`, `Jenis_Obat`)
+VALUES
+	(1,'Tablet'),
+	(2,'Syrup');
+
+/*!40000 ALTER TABLE `Tbl_JenisObat` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 # Dump of table Tbl_LogActivity
 # ------------------------------------------------------------
 
@@ -56,6 +104,16 @@ CREATE TABLE `Tbl_LogActivity` (
   CONSTRAINT `LogRelatedToUser` FOREIGN KEY (`Id_User`) REFERENCES `Tbl_User` (`Id_User`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+LOCK TABLES `Tbl_LogActivity` WRITE;
+/*!40000 ALTER TABLE `Tbl_LogActivity` DISABLE KEYS */;
+
+INSERT INTO `Tbl_LogActivity` (`Id_Log`, `waktu`, `aktifitas`, `Id_User`)
+VALUES
+	(1,'2022-07-15 20:44:46','Login Android',1),
+	(2,'2022-07-15 22:38:43','Transaksi T001 pada Android',1);
+
+/*!40000 ALTER TABLE `Tbl_LogActivity` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table Tbl_Obat
@@ -73,6 +131,16 @@ CREATE TABLE `Tbl_Obat` (
   PRIMARY KEY (`Id_Obat`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+LOCK TABLES `Tbl_Obat` WRITE;
+/*!40000 ALTER TABLE `Tbl_Obat` DISABLE KEYS */;
+
+INSERT INTO `Tbl_Obat` (`Id_Obat`, `Kode_Obat`, `Nama_Obat`, `Expired_Date`, `Jumlah`, `Harga`)
+VALUES
+	(1,'O001','Paramex','2069-12-31',64,6900),
+	(2,'O002','Promag','2069-12-31',64,6900);
+
+/*!40000 ALTER TABLE `Tbl_Obat` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table Tbl_Transaksi
@@ -86,17 +154,54 @@ CREATE TABLE `Tbl_Transaksi` (
   `Tgl_Transaksi` date NOT NULL,
   `Total_Bayar` bigint(20) NOT NULL,
   `Id_User` int(11) unsigned NOT NULL,
-  `Id_Obat` int(11) unsigned NOT NULL,
-  `Id_Resep` int(11) unsigned NOT NULL,
+  `Id_JenisObat` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`Id_Transaksi`),
   KEY `TransaksiRelatedToUser` (`Id_User`),
-  KEY `TransaksiRelatedToObat` (`Id_Obat`),
-  KEY `TransaksiRelatedToResep` (`Id_Resep`),
-  CONSTRAINT `TransaksiRelatedToObat` FOREIGN KEY (`Id_Obat`) REFERENCES `Tbl_Obat` (`Id_Obat`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `TransaksiRelatedToResep` FOREIGN KEY (`Id_Resep`) REFERENCES `Tbl_DataResep` (`Id_Resep`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `TransaksiRelatedToJenisObat` (`Id_JenisObat`),
+  CONSTRAINT `TransaksiRelatedToJenisObat` FOREIGN KEY (`Id_JenisObat`) REFERENCES `Tbl_JenisObat` (`Id_JenisObat`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `TransaksiRelatedToUser` FOREIGN KEY (`Id_User`) REFERENCES `Tbl_User` (`Id_User`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+LOCK TABLES `Tbl_Transaksi` WRITE;
+/*!40000 ALTER TABLE `Tbl_Transaksi` DISABLE KEYS */;
+
+INSERT INTO `Tbl_Transaksi` (`Id_Transaksi`, `No_Transaksi`, `Tgl_Transaksi`, `Total_Bayar`, `Id_User`, `Id_JenisObat`)
+VALUES
+	(1,'T001','2022-07-15',69000,1,1);
+
+/*!40000 ALTER TABLE `Tbl_Transaksi` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table Tbl_TransaksiDetail
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `Tbl_TransaksiDetail`;
+
+CREATE TABLE `Tbl_TransaksiDetail` (
+  `Id_TransaksiDetail` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `Id_Transaksi` int(11) unsigned NOT NULL,
+  `Id_Resep` int(10) unsigned DEFAULT NULL,
+  `Id_Obat` int(11) unsigned DEFAULT NULL,
+  `Qty_Obat` int(11) DEFAULT NULL,
+  PRIMARY KEY (`Id_TransaksiDetail`),
+  KEY `DetailRelatedToTransaksi` (`Id_Transaksi`),
+  KEY `DetailRelatedToResep` (`Id_Resep`),
+  CONSTRAINT `DetailRelatedToObat` FOREIGN KEY (`Id_TransaksiDetail`) REFERENCES `Tbl_Obat` (`Id_Obat`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `DetailRelatedToResep` FOREIGN KEY (`Id_Resep`) REFERENCES `Tbl_DataResep` (`Id_Resep`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `DetailRelatedToTransaksi` FOREIGN KEY (`Id_Transaksi`) REFERENCES `Tbl_Transaksi` (`Id_Transaksi`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `Tbl_TransaksiDetail` WRITE;
+/*!40000 ALTER TABLE `Tbl_TransaksiDetail` DISABLE KEYS */;
+
+INSERT INTO `Tbl_TransaksiDetail` (`Id_TransaksiDetail`, `Id_Transaksi`, `Id_Resep`, `Id_Obat`, `Qty_Obat`)
+VALUES
+	(1,1,NULL,1,5),
+	(2,1,NULL,2,5);
+
+/*!40000 ALTER TABLE `Tbl_TransaksiDetail` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table Tbl_User
@@ -115,6 +220,15 @@ CREATE TABLE `Tbl_User` (
   PRIMARY KEY (`Id_User`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+LOCK TABLES `Tbl_User` WRITE;
+/*!40000 ALTER TABLE `Tbl_User` DISABLE KEYS */;
+
+INSERT INTO `Tbl_User` (`Id_User`, `Tipe_User`, `Nama_User`, `Alamat`, `Telepon`, `Username`, `Password`)
+VALUES
+	(1,'Kasir','Taufik Mulyana','Kamarung','081234567890','taufik','d4305d7ed2ec97107cd6eb8dd4b6f6b7');
+
+/*!40000 ALTER TABLE `Tbl_User` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 

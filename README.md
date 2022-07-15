@@ -4,6 +4,10 @@
     - 0.0.0.0:8000 itu agar bisa diakses dengan 2 cara,
     - `localhost:8000` atau `IP_ADDRESS:8000`
 
+# Documentation
+- DB : lks_apotek.sql
+- API Documentation : LKS Apotek.postman_collection.json (Postman Collection v2.1)
+
 # Lumen PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
