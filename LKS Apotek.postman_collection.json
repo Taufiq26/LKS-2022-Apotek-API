@@ -75,7 +75,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"total_bayar\": 69000,\n    \"id_jenis_obat\": 1,\n    \"obat\": [\n        {\n            \"id\": 1,\n            \"qty\": 5\n        },\n        {\n            \"id\": 2,\n            \"qty\": 5\n        }\n    ]\n}",
+							"raw": "{\n    \"total_bayar\": 69000,\n    \"id_jenis_obat\": 1,\n    \"nama_pasien\": \"Ucok\",\n    \"obat\": [1, 2]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
