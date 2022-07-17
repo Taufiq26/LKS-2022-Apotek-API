@@ -53,19 +53,22 @@ class TransaksiController extends Controller
                 'No_Transaksi' => $this->generateNoTransaksi(),
                 'Tgl_Transaksi' => date('Y-m-d'),
                 'Total_Bayar' => $req->total_bayar,
+                'Nama_Pasien' => $req->nama_pasien,
                 'Id_User' => $user->Id_User,
                 'Id_JenisObat' => $req->id_jenis_obat
             ]);
 
             foreach ($req->obat as $obat) {
+                $obat_update = Tbl_Obat::find($obat);
+
                 Tbl_TransaksiDetail::create([
                     'Id_Transaksi' => $transaksi->Id_Transaksi,
-                    'Id_Obat' => $obat['id'],
-                    'Qty_Obat' => $obat['qty']
+                    'Id_Obat' => $obat_update->Id_Obat,
+                    'Qty_Obat' => 1,
+                    'Subtotal' => $obat_update->Harga,
                 ]);
 
-                $obat_update = Tbl_Obat::find($obat['id']);
-                $obat_update->Jumlah = $obat_update->Jumlah - $obat['qty'];
+                $obat_update->Jumlah = $obat_update->Jumlah - 1;
                 $obat_update->save();
             }
 

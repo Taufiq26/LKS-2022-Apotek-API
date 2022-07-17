@@ -10,7 +10,8 @@ class Tbl_TransaksiDetail extends Model
     protected $primaryKey = 'Id_TransaksiDetail';
     protected $fillable = [
         'Id_Transaksi', 'Id_Resep', 
-        'Id_Obat', 'Qty_Obat'
+        'Id_Obat', 'Qty_Obat',
+        'Subtotal'
     ];
     public $timestamps = false;
 

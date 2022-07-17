@@ -5,9 +5,9 @@
 # http://www.sequelpro.com/
 # https://github.com/sequelpro/sequelpro
 #
-# Host: 127.0.0.1 (MySQL 5.7.34)
+# Host: 127.0.0.1 (MySQL 5.5.5-10.1.48-MariaDB-0+deb9u2)
 # Database: lks_apotek
-# Generation Time: 2022-07-15 15:39:48 +0000
+# Generation Time: 2022-07-17 05:38:25 +0000
 # ************************************************************
 
 
@@ -39,7 +39,8 @@ LOCK TABLES `Tbl_AccessToken` WRITE;
 
 INSERT INTO `Tbl_AccessToken` (`id`, `Id_User`, `Token`)
 VALUES
-	(1,1,'da90ceb2-4ec0-435c-9054-720a765b4717');
+	(1,1,'da90ceb2-4ec0-435c-9054-720a765b4717'),
+	(2,1,'bd63893e-7018-439b-b4d2-9fb20bed2e5f');
 
 /*!40000 ALTER TABLE `Tbl_AccessToken` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -57,7 +58,8 @@ CREATE TABLE `Tbl_DataResep` (
   `Nama_Dokter` varchar(50) NOT NULL DEFAULT '',
   `Nama_Pasien` varchar(50) NOT NULL DEFAULT '',
   `Nama_ObatDibeli` varchar(50) NOT NULL DEFAULT '',
-  `Jumlah_ObatDibeli` bigint(50) NOT NULL,
+  `Harga_ObatDibeli` bigint(20) NOT NULL,
+  `Jumlah_ObatDibeli` bigint(20) NOT NULL,
   `Id_Pasien` int(11) unsigned NOT NULL,
   PRIMARY KEY (`Id_Resep`),
   KEY `ResepRelatedToPasien` (`Id_Pasien`),
@@ -110,7 +112,8 @@ LOCK TABLES `Tbl_LogActivity` WRITE;
 INSERT INTO `Tbl_LogActivity` (`Id_Log`, `waktu`, `aktifitas`, `Id_User`)
 VALUES
 	(1,'2022-07-15 20:44:46','Login Android',1),
-	(2,'2022-07-15 22:38:43','Transaksi T001 pada Android',1);
+	(2,'2022-07-15 22:38:43','Transaksi T001 pada Android',1),
+	(3,'2022-07-17 12:52:50','Login pada Android',1);
 
 /*!40000 ALTER TABLE `Tbl_LogActivity` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -152,6 +155,7 @@ CREATE TABLE `Tbl_Transaksi` (
   `Id_Transaksi` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `No_Transaksi` varchar(50) NOT NULL DEFAULT '',
   `Tgl_Transaksi` date NOT NULL,
+  `Nama_Pasien` varchar(50) DEFAULT '',
   `Total_Bayar` bigint(20) NOT NULL,
   `Id_User` int(11) unsigned NOT NULL,
   `Id_JenisObat` int(11) unsigned DEFAULT NULL,
@@ -165,9 +169,9 @@ CREATE TABLE `Tbl_Transaksi` (
 LOCK TABLES `Tbl_Transaksi` WRITE;
 /*!40000 ALTER TABLE `Tbl_Transaksi` DISABLE KEYS */;
 
-INSERT INTO `Tbl_Transaksi` (`Id_Transaksi`, `No_Transaksi`, `Tgl_Transaksi`, `Total_Bayar`, `Id_User`, `Id_JenisObat`)
+INSERT INTO `Tbl_Transaksi` (`Id_Transaksi`, `No_Transaksi`, `Tgl_Transaksi`, `Nama_Pasien`, `Total_Bayar`, `Id_User`, `Id_JenisObat`)
 VALUES
-	(1,'T001','2022-07-15',69000,1,1);
+	(1,'T001','2022-07-15',NULL,69000,1,1);
 
 /*!40000 ALTER TABLE `Tbl_Transaksi` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -184,10 +188,12 @@ CREATE TABLE `Tbl_TransaksiDetail` (
   `Id_Resep` int(10) unsigned DEFAULT NULL,
   `Id_Obat` int(11) unsigned DEFAULT NULL,
   `Qty_Obat` int(11) DEFAULT NULL,
+  `Subtotal` bigint(20) NOT NULL,
   PRIMARY KEY (`Id_TransaksiDetail`),
   KEY `DetailRelatedToTransaksi` (`Id_Transaksi`),
   KEY `DetailRelatedToResep` (`Id_Resep`),
-  CONSTRAINT `DetailRelatedToObat` FOREIGN KEY (`Id_TransaksiDetail`) REFERENCES `Tbl_Obat` (`Id_Obat`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `DetailRelatedToObat` (`Id_Obat`),
+  CONSTRAINT `DetailRelatedToObat` FOREIGN KEY (`Id_Obat`) REFERENCES `Tbl_Obat` (`Id_Obat`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `DetailRelatedToResep` FOREIGN KEY (`Id_Resep`) REFERENCES `Tbl_DataResep` (`Id_Resep`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `DetailRelatedToTransaksi` FOREIGN KEY (`Id_Transaksi`) REFERENCES `Tbl_Transaksi` (`Id_Transaksi`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -195,10 +201,10 @@ CREATE TABLE `Tbl_TransaksiDetail` (
 LOCK TABLES `Tbl_TransaksiDetail` WRITE;
 /*!40000 ALTER TABLE `Tbl_TransaksiDetail` DISABLE KEYS */;
 
-INSERT INTO `Tbl_TransaksiDetail` (`Id_TransaksiDetail`, `Id_Transaksi`, `Id_Resep`, `Id_Obat`, `Qty_Obat`)
+INSERT INTO `Tbl_TransaksiDetail` (`Id_TransaksiDetail`, `Id_Transaksi`, `Id_Resep`, `Id_Obat`, `Qty_Obat`, `Subtotal`)
 VALUES
-	(1,1,NULL,1,5),
-	(2,1,NULL,2,5);
+	(1,1,NULL,1,5,34500),
+	(2,1,NULL,2,5,34500);
 
 /*!40000 ALTER TABLE `Tbl_TransaksiDetail` ENABLE KEYS */;
 UNLOCK TABLES;
