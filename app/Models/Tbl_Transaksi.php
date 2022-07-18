@@ -19,4 +19,8 @@ class Tbl_Transaksi extends Model
     public function detail() {
         return $this->hasMany(Tbl_TransaksiDetail::class, 'Id_Transaksi', 'Id_Transaksi');
     }
+    
+    public function jenis_obat() {
+        return $this->hasOne(Tbl_JenisObat::class, 'Id_JenisObat', 'Id_JenisObat');
+    }
 }

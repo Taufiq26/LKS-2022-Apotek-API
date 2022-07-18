@@ -24,6 +24,6 @@ class CustomAuthMiddleware
         if ($token && $check_token)
             return $next($request);
         else
-            return response()->json('Unauthorizen', 401);
+            return response()->json('Unauthorized', 401);
     }
 }

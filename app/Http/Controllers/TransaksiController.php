@@ -78,11 +78,25 @@ class TransaksiController extends Controller
                 'Id_User' => $user->Id_User
             ]);
     
-            $transaksi = Tbl_Transaksi::with('detail.obat')
+            $transaksi = Tbl_Transaksi::with('jenis_obat')
                                     ->find($transaksi->Id_Transaksi);
+
+            $detail = Tbl_TransaksiDetail::select('Id_Obat')
+                                        ->where('Id_Transaksi', $transaksi->Id_Transaksi)
+                                        ->get();
+            $obat = Tbl_Obat::whereIn('Id_Obat',$detail)->get();
+            $obat_simply = [];
+            foreach ($obat as $o) {
+                $obat_simply[] = $o->Nama_Obat;
+            }
+            
             return response()->json([
-                'data' => $transaksi
+                'total' => $transaksi->Total_Bayar,
+                'pembeli' => $transaksi->Nama_Pasien,
+                'obat' => $obat_simply,
+                'jenis_obat' => $transaksi->jenis_obat->Jenis_Obat
             ], 200);
+
         } catch (\Throwable $th) {
     
             return response()->json([
