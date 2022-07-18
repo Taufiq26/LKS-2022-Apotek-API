@@ -24,7 +24,9 @@ class ObatController extends Controller
         try {
             $obat = Tbl_Obat::all();
     
-            return response()->json($obat, 200);
+            return response()->json([
+                'data' => $obat
+            ], 200);
         } catch (\Throwable $th) {
     
             return response()->json([
@@ -38,7 +40,9 @@ class ObatController extends Controller
         try {
             $jenis_obat = Tbl_JenisObat::all();
     
-            return response()->json($jenis_obat, 200);
+            return response()->json([
+                'data' => $jenis_obat
+            ], 200);
         } catch (\Throwable $th) {
     
             return response()->json([

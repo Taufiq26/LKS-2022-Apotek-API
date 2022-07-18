@@ -80,7 +80,9 @@ class TransaksiController extends Controller
     
             $transaksi = Tbl_Transaksi::with('detail.obat')
                                     ->find($transaksi->Id_Transaksi);
-            return response()->json($transaksi, 200);
+            return response()->json([
+                'data' => $transaksi
+            ], 200);
         } catch (\Throwable $th) {
     
             return response()->json([
